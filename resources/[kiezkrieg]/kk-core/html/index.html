@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiezKrieg Main Menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="mainMenu" class="menu-container" style="display: none;">
+        <div class="menu-header">
+            <h1>KiezKrieg</h1>
+            <p>Gangwar & Crimelife Framework</p>
+        </div>
+        
+        <div class="menu-content">
+            <!-- Statistics Panel -->
+            <div class="stats-panel">
+                <h2>Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">FFA Headshot</span>
+                        <span class="stat-value" id="ffa-headshot-kda">0/0/0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">FFA Bodyshot</span>
+                        <span class="stat-value" id="ffa-bodyshot-kda">0/0/0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Custom Lobbies</span>
+                        <span class="stat-value" id="custom-lobby-kda">0/0/0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Helifight</span>
+                        <span class="stat-value" id="helifight-kda">0/0/0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Gangwar</span>
+                        <span class="stat-value" id="gangwar-kda">0/0/0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Game Mode Categories -->
+            <div class="categories">
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-tab="ffa">FreeForAll</button>
+                    <button class="tab-btn" data-tab="custom">Custom Lobbies</button>
+                    <button class="tab-btn" data-tab="helifight">Helifight</button>
+                    <button class="tab-btn" data-tab="gangwar">Gangwar</button>
+                    <button class="tab-btn" data-tab="faction">Faction</button>
+                </div>
+                
+                <!-- FFA Tab -->
+                <div id="ffa-tab" class="tab-content active">
+                    <h3>FreeForAll Zones</h3>
+                    <div class="mode-selector">
+                        <button class="mode-btn" data-mode="headshot">Headshot Mode</button>
+                        <button class="mode-btn" data-mode="bodyshot">Bodyshot Mode</button>
+                    </div>
+                    <div id="ffa-zones" class="zones-list">
+                        <!-- Zones will be populated dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Custom Lobbies Tab -->
+                <div id="custom-tab" class="tab-content">
+                    <h3>Custom Lobbies</h3>
+                    <div class="lobby-actions">
+                        <button id="create-lobby-btn" class="action-btn">Create Lobby</button>
+                        <button id="refresh-lobbies-btn" class="action-btn">Refresh</button>
+                    </div>
+                    <div id="custom-lobbies" class="lobbies-list">
+                        <!-- Lobbies will be populated dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Helifight Tab -->
+                <div id="helifight-tab" class="tab-content">
+                    <h3>Helifight (3v3)</h3>
+                    <div class="helifight-settings">
+                        <label for="rounds-select">Rounds:</label>
+                        <select id="rounds-select">
+                            <option value="5">5 Rounds</option>
+                            <option value="10">10 Rounds</option>
+                            <option value="15">15 Rounds</option>
+                        </select>
+                        <button id="join-helifight-btn" class="action-btn">Join Helifight</button>
+                    </div>
+                </div>
+                
+                <!-- Gangwar Tab -->
+                <div id="gangwar-tab" class="tab-content">
+                    <h3>Gangwar</h3>
+                    <div class="gangwar-info">
+                        <p>Join faction-based combat in the open world</p>
+                        <button id="join-gangwar-btn" class="action-btn">Join Gangwar</button>
+                    </div>
+                </div>
+                
+                <!-- Faction Tab -->
+                <div id="faction-tab" class="tab-content">
+                    <h3>Faction Management</h3>
+                    <div class="faction-info">
+                        <p>Manage your faction or create a new one</p>
+                        <button id="create-faction-btn" class="action-btn">Create Faction</button>
+                        <button id="manage-faction-btn" class="action-btn">Manage Faction</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-footer">
+            <button id="close-menu-btn" class="close-btn">Close Menu</button>
+        </div>
+    </div>
+    
+    <!-- Create Lobby Modal -->
+    <div id="create-lobby-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Create Custom Lobby</h3>
+            <form id="create-lobby-form">
+                <div class="form-group">
+                    <label for="lobby-name">Lobby Name:</label>
+                    <input type="text" id="lobby-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="lobby-password">Password (Optional):</label>
+                    <input type="password" id="lobby-password">
+                </div>
+                <div class="form-group">
+                    <label for="max-players">Max Players:</label>
+                    <select id="max-players">
+                        <option value="10">10 Players</option>
+                        <option value="20" selected>20 Players</option>
+                        <option value="30">30 Players</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="action-btn">Create</button>
+                    <button type="button" id="cancel-create-btn" class="action-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
