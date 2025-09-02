@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiezKrieg Main Menu</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="main-container" class="hidden">
+        <div class="menu-overlay">
+            <div class="menu-container">
+                <!-- Header -->
+                <div class="menu-header">
+                    <h1 class="menu-title">KiezKrieg</h1>
+                    <p class="menu-subtitle">Gangwar & Crimelife Framework</p>
+                    <button class="close-btn" onclick="closeMenu()">&times;</button>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="stats-section">
+                    <h2>Your Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Headshot Mode</h3>
+                            <div class="stat-row">
+                                <span>Kills:</span>
+                                <span id="headshot-kills">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Deaths:</span>
+                                <span id="headshot-deaths">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>K/D:</span>
+                                <span id="headshot-kda">0.00</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Bodyshot Mode</h3>
+                            <div class="stat-row">
+                                <span>Kills:</span>
+                                <span id="bodyshot-kills">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Deaths:</span>
+                                <span id="bodyshot-deaths">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>K/D:</span>
+                                <span id="bodyshot-kda">0.00</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Helifight</h3>
+                            <div class="stat-row">
+                                <span>Kills:</span>
+                                <span id="helifight-kills">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Deaths:</span>
+                                <span id="helifight-deaths">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>K/D:</span>
+                                <span id="helifight-kda">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Categories -->
+                <div class="menu-categories">
+                    <div class="category-nav">
+                        <button class="nav-btn active" onclick="showCategory('ffa')">FreeForAll</button>
+                        <button class="nav-btn" onclick="showCategory('lobbies')">Custom Lobbies</button>
+                        <button class="nav-btn" onclick="showCategory('helifight')">Helifight</button>
+                        <button class="nav-btn" onclick="showCategory('gangwar')">Gangwar</button>
+                        <button class="nav-btn" onclick="showCategory('factions')">Factions</button>
+                    </div>
+
+                    <!-- FFA Category -->
+                    <div id="category-ffa" class="category-content">
+                        <h3>FreeForAll Zones</h3>
+                        <div class="mode-selector">
+                            <button class="mode-btn active" data-mode="headshot">Headshot Mode</button>
+                            <button class="mode-btn" data-mode="bodyshot">Bodyshot Mode</button>
+                        </div>
+                        <div id="ffa-zones" class="zones-grid">
+                            <!-- Zones will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Custom Lobbies Category -->
+                    <div id="category-lobbies" class="category-content hidden">
+                        <h3>Custom Lobbies</h3>
+                        <div class="lobby-actions">
+                            <button class="action-btn primary" onclick="showCreateLobby()">Create Lobby</button>
+                            <button class="action-btn secondary" onclick="refreshLobbies()">Refresh List</button>
+                        </div>
+                        <div id="lobbies-list" class="lobbies-container">
+                            <!-- Lobbies will be populated by JavaScript -->
+                        </div>
+                        
+                        <!-- Create Lobby Form -->
+                        <div id="create-lobby-form" class="create-form hidden">
+                            <h4>Create New Lobby</h4>
+                            <input type="text" id="lobby-name" placeholder="Lobby Name" maxlength="30">
+                            <input type="password" id="lobby-password" placeholder="Password (optional)">
+                            <select id="lobby-map">
+                                <option value="default">Default Map</option>
+                                <option value="airport">Airport</option>
+                                <option value="downtown">Downtown</option>
+                                <option value="industrial">Industrial</option>
+                            </select>
+                            <input type="number" id="lobby-maxplayers" placeholder="Max Players (2-20)" min="2" max="20" value="10">
+                            <div class="form-actions">
+                                <button class="action-btn primary" onclick="createLobby()">Create</button>
+                                <button class="action-btn secondary" onclick="hideCreateLobby()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Helifight Category -->
+                    <div id="category-helifight" class="category-content hidden">
+                        <h3>Helifight (3v3)</h3>
+                        <div class="helifight-info">
+                            <p><strong>Roles:</strong> Pilot, Co-Pilot (Revolver), Rear Passenger (Special Carbine)</p>
+                            <p><strong>Vehicle:</strong> Supervolito</p>
+                            <p><strong>Max Rounds:</strong> 15</p>
+                        </div>
+                        <button class="action-btn primary large" onclick="joinHelifight()">Join Helifight</button>
+                    </div>
+
+                    <!-- Gangwar Category -->
+                    <div id="category-gangwar" class="category-content hidden">
+                        <h3>Gangwar</h3>
+                        <div class="gangwar-modes">
+                            <div class="mode-card">
+                                <h4>Open World</h4>
+                                <p>Join the open world gangwar with dynamic factions</p>
+                                <button class="action-btn primary">Join Open World</button>
+                            </div>
+                            <div class="mode-card">
+                                <h4>Private Factions</h4>
+                                <p>Join or create private faction battles</p>
+                                <button class="action-btn primary">View Private Factions</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Factions Category -->
+                    <div id="category-factions" class="category-content hidden">
+                        <h3>Faction Management</h3>
+                        <div class="faction-info">
+                            <p>Manage your faction membership and view faction statistics</p>
+                        </div>
+                        <button class="action-btn primary large" onclick="openFactionMenu()">Open Faction Menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
