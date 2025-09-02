@@ -1,0 +1,38 @@
+# KiezKrieg Framework - Server Configuration Example
+# Add these lines to your server.cfg in the correct order
+
+# Essential resources (load first)
+ensure yarn
+ensure webpack
+ensure mysql-async  # or oxmysql
+ensure es_extended
+
+# KiezKrieg Framework (load in this exact order)
+ensure kk-database
+ensure kk-core
+ensure kk-ui
+ensure kk-zones
+ensure kk-factions
+ensure kk-admin
+
+# Optional: Additional ESX resources that work well with KiezKrieg
+# ensure esx_basicneeds
+# ensure esx_shops
+# ensure esx_vehicleshop
+
+# Server settings
+sv_hostname "Your Server Name - KiezKrieg Framework"
+sv_maxclients 32
+
+# Database connection (example for oxmysql)
+set mysql_connection_string "mysql://username:password@localhost/database_name"
+
+# Admin settings
+add_ace group.admin command allow
+add_ace group.admin command.* allow
+add_principal identifier.license:your_license_here group.admin
+
+# KiezKrieg specific convars (optional)
+set kk_debug true
+set kk_auto_zone_cleanup true
+set kk_max_faction_members 50

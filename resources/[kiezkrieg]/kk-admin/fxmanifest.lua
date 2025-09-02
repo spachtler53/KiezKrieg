@@ -1,8 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
-name 'KiezKrieg Core'
-description 'KiezKrieg - Core Framework for FiveM Gangwar & Crimelife'
+name 'KiezKrieg Admin'
+description 'KiezKrieg - Admin system with duty, teleport, and management functions'
 author 'KiezKrieg Team'
 version '1.0.0'
 
@@ -20,12 +20,8 @@ server_scripts {
     'server/*.lua'
 }
 
-ui_page 'nui://kk-ui/html/index.html'
-
 dependencies {
-    'es_extended',
-    'oxmysql',
-    'kk-ui'
+    'kk-core'
 }
 
 lua54 'yes'
