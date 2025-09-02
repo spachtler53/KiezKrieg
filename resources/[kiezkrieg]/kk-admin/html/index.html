@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiezKrieg Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="adminMenu" class="admin-container" style="display: none;">
+        <div class="admin-header">
+            <h1>Admin Panel</h1>
+            <div class="duty-status">
+                <span id="duty-status-text">Off Duty</span>
+                <button id="toggle-duty-btn" class="duty-btn">Toggle Duty</button>
+            </div>
+        </div>
+        
+        <div class="admin-content">
+            <div class="admin-section">
+                <h2>Teleportation</h2>
+                <div class="admin-actions">
+                    <div class="input-group">
+                        <input type="number" id="goto-player-id" placeholder="Player ID">
+                        <button id="goto-btn" class="action-btn">Go To Player</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="bring-player-id" placeholder="Player ID">
+                        <button id="bring-btn" class="action-btn">Bring Player</button>
+                    </div>
+                    <button id="tpm-btn" class="action-btn">Teleport to Marker</button>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h2>Vehicle Management</h2>
+                <div class="admin-actions">
+                    <div class="input-group">
+                        <input type="text" id="vehicle-model" placeholder="Vehicle Model">
+                        <button id="spawn-vehicle-btn" class="action-btn">Spawn Vehicle</button>
+                    </div>
+                    <button id="delete-vehicles-btn" class="action-btn danger">Delete Nearby Vehicles</button>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h2>Display Options</h2>
+                <div class="admin-actions">
+                    <button id="toggle-nametags-btn" class="action-btn">Toggle Nametags</button>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h2>Faction Management</h2>
+                <div class="admin-actions">
+                    <div class="input-group">
+                        <input type="text" id="faction-name" placeholder="Faction Name">
+                        <button id="create-faction-btn" class="action-btn">Create Faction</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h2>Player List</h2>
+                <div id="player-list" class="player-list">
+                    <!-- Players will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="admin-footer">
+            <button id="close-admin-btn" class="close-btn">Close Panel</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

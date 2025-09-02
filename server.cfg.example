@@ -1,0 +1,24 @@
+# KiezKrieg Framework - server.cfg Configuration
+
+# Add these lines to your server.cfg file to enable KiezKrieg resources
+
+# Core ESX requirement (make sure this is loaded first)
+ensure es_extended
+ensure oxmysql
+
+# KiezKrieg Framework - Load in this order
+ensure kk-database     # Must be first - sets up database schema
+ensure kk-core         # Core framework and main menu
+ensure kk-zones        # Zone system with visual markers
+ensure kk-admin        # Admin system
+ensure kk-factions     # Faction system
+
+# Optional: Set resource load order to ensure proper initialization
+start kk-database
+start kk-core
+start kk-zones
+start kk-admin
+start kk-factions
+
+# Make sure your MySQL connection is configured correctly in your server.cfg:
+# set mysql_connection_string "mysql://username:password@localhost/database_name?charset=utf8mb4"
