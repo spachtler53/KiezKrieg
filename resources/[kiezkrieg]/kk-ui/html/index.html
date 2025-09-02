@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiezKrieg</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <!-- Main Menu Container -->
+        <div id="mainMenu" class="menu-container">
+            <!-- Header -->
+            <div class="menu-header">
+                <h1 class="menu-title">KiezKrieg</h1>
+                <div class="player-info">
+                    <span id="playerName">Player</span>
+                    <div class="kda-display">
+                        <span class="kda-label">Overall KDA:</span>
+                        <span id="overallKDA">0.0</span>
+                    </div>
+                </div>
+                <button id="closeMenuBtn" class="close-btn">×</button>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="ffa">FFA</button>
+                <button class="nav-tab" data-tab="custom">Custom Lobbies</button>
+                <button class="nav-tab" data-tab="helifight">Helifight</button>
+                <button class="nav-tab" data-tab="gangwar">Gangwar</button>
+                <button class="nav-tab" data-tab="faction">Faction</button>
+                <button class="nav-tab" data-tab="settings">Settings</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- FFA Tab -->
+                <div id="ffa-tab" class="tab-pane active">
+                    <div class="mode-header">
+                        <h2>FreeForAll</h2>
+                        <div class="mode-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Headshot KDA</span>
+                                <span id="headshotKDA" class="stat-value">0.0</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Bodyshot KDA</span>
+                                <span id="bodyshotKDA" class="stat-value">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="weapon-mode-selector">
+                        <button class="weapon-mode-btn active" data-mode="headshot">
+                            <h3>Headshot Mode</h3>
+                            <p>Pistol Only</p>
+                        </button>
+                        <button class="weapon-mode-btn" data-mode="bodyshot">
+                            <h3>Bodyshot Mode</h3>
+                            <p>Special Carbine & Advanced Rifle</p>
+                        </button>
+                    </div>
+                    
+                    <div class="zones-container">
+                        <h3>Available Zones</h3>
+                        <div id="ffaZonesList" class="zones-list">
+                            <!-- Zones will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Lobbies Tab -->
+                <div id="custom-tab" class="tab-pane">
+                    <div class="mode-header">
+                        <h2>Custom Lobbies</h2>
+                        <div class="mode-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Custom KDA</span>
+                                <span id="customKDA" class="stat-value">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lobby-actions">
+                        <button id="createLobbyBtn" class="action-btn primary">Create Lobby</button>
+                        <button id="refreshLobbiesBtn" class="action-btn">Refresh</button>
+                    </div>
+                    
+                    <div class="lobbies-container">
+                        <h3>Available Lobbies</h3>
+                        <div id="customLobbiesList" class="lobbies-list">
+                            <!-- Lobbies will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Helifight Tab -->
+                <div id="helifight-tab" class="tab-pane">
+                    <div class="mode-header">
+                        <h2>Helifight (3v3)</h2>
+                        <div class="mode-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Helifight KDA</span>
+                                <span id="helifightKDA" class="stat-value">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="helifight-info">
+                        <div class="role-info">
+                            <h3>Roles</h3>
+                            <div class="roles-grid">
+                                <div class="role-card">
+                                    <h4>Pilot</h4>
+                                    <p>Flying only</p>
+                                </div>
+                                <div class="role-card">
+                                    <h4>Co-Pilot</h4>
+                                    <p>Revolver</p>
+                                </div>
+                                <div class="role-card">
+                                    <h4>Rear Passenger</h4>
+                                    <p>Special Carbine</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="joinHelifightBtn" class="action-btn primary large">Join Queue</button>
+                </div>
+
+                <!-- Gangwar Tab -->
+                <div id="gangwar-tab" class="tab-pane">
+                    <div class="mode-header">
+                        <h2>Gangwar</h2>
+                        <div class="mode-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Gangwar KDA</span>
+                                <span id="gangwarKDA" class="stat-value">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="factionStatus" class="faction-status">
+                        <p>You are not in a faction</p>
+                    </div>
+                    
+                    <div class="gangwar-actions">
+                        <button id="joinGangwarBtn" class="action-btn primary">Enter Gangwar</button>
+                        <button id="manageFactionBtn" class="action-btn">Manage Faction</button>
+                    </div>
+                </div>
+
+                <!-- Faction Tab -->
+                <div id="faction-tab" class="tab-pane">
+                    <div class="mode-header">
+                        <h2>Faction Management</h2>
+                    </div>
+                    
+                    <div id="factionContent">
+                        <!-- Faction content will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="tab-pane">
+                    <div class="mode-header">
+                        <h2>Settings</h2>
+                    </div>
+                    
+                    <div class="settings-container">
+                        <div class="setting-group">
+                            <label class="setting-label">
+                                <input type="checkbox" id="autoOpenMenu" class="setting-checkbox">
+                                Auto-open menu after character selection
+                            </label>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">Preferred Weapon Mode</label>
+                            <select id="preferredWeaponMode" class="setting-select">
+                                <option value="headshot">Headshot</option>
+                                <option value="bodyshot">Bodyshot</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">
+                                <input type="checkbox" id="soundEnabled" class="setting-checkbox">
+                                Enable sounds
+                            </label>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">
+                                <input type="checkbox" id="notificationsEnabled" class="setting-checkbox">
+                                Enable notifications
+                            </label>
+                        </div>
+                        
+                        <button id="saveSettingsBtn" class="action-btn primary">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Lobby Modal -->
+        <div id="createLobbyModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Create Custom Lobby</h3>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Lobby Name</label>
+                        <input type="text" id="lobbyName" placeholder="Enter lobby name" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Players</label>
+                        <select id="lobbyMaxPlayers">
+                            <option value="10">10</option>
+                            <option value="16">16</option>
+                            <option value="20" selected>20</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="lobbyPrivate">
+                            Private Lobby
+                        </label>
+                    </div>
+                    <div class="form-group" id="passwordGroup" style="display: none;">
+                        <label>Password</label>
+                        <input type="password" id="lobbyPassword" placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelCreateLobby" class="action-btn">Cancel</button>
+                    <button id="confirmCreateLobby" class="action-btn primary">Create</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification System -->
+        <div id="notifications" class="notifications-container">
+            <!-- Notifications will be added dynamically -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
