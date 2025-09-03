@@ -2,6 +2,75 @@
 local IsOnDuty = false
 local ShowNametags = false
 local AdminVehicles = {}
+local IsAdminMenuOpen = false
+
+-- Initialize admin client
+Citizen.CreateThread(function()
+    -- Wait for ESX to be ready
+    while not ESX.GetPlayerData().job do
+        Citizen.Wait(10)
+    end
+    
+    -- Register F3 key mapping for admin menu
+    RegisterKeyMapping('kk_admin_menu', 'Open Admin Menu', 'keyboard', 'F3')
+    RegisterCommand('kk_admin_menu', function()
+        print('[KiezKrieg] F3 pressed - checking admin permissions')
+        OpenAdminMenu()
+    end, false)
+    
+    print('[KiezKrieg] Admin client initialized')
+end)
+
+-- Admin menu functions
+function OpenAdminMenu()
+    if IsAdminMenuOpen then 
+        print('[KiezKrieg] Admin menu already open')
+        return 
+    end
+    
+    -- Check if player has admin permissions by triggering server check
+    TriggerServerEvent('kk-admin:checkPermissions')
+end
+
+function ShowAdminMenu()
+    if IsAdminMenuOpen then return end
+    
+    print('[KiezKrieg] Opening admin menu')
+    IsAdminMenuOpen = true
+    SetNuiFocus(true, true)
+    
+    -- Send admin menu data to UI
+    SendNUIMessage({
+        type = 'openAdminMenu',
+        isOnDuty = IsOnDuty,
+        adminCommands = {
+            'aduty', 'goto', 'tpm', 'bring', 'vehicle', 'dv', 'nametags'
+        }
+    })
+end
+
+function CloseAdminMenu()
+    if not IsAdminMenuOpen then return end
+    
+    print('[KiezKrieg] Closing admin menu')
+    IsAdminMenuOpen = false
+    SetNuiFocus(false, false)
+    
+    SendNUIMessage({
+        type = 'closeAdminMenu'
+    })
+end
+
+-- Server response handlers
+RegisterNetEvent('kk-admin:permissionGranted')
+AddEventHandler('kk-admin:permissionGranted', function()
+    ShowAdminMenu()
+end)
+
+RegisterNetEvent('kk-admin:permissionDenied')
+AddEventHandler('kk-admin:permissionDenied', function()
+    exports['kk-ui']:ShowNotification('You do not have admin permissions', 'error')
+end)
 
 -- Event handlers
 RegisterNetEvent('kk-admin:setDutyStatus')
@@ -278,4 +347,23 @@ end)
 
 exports('GetAdminVehicles', function()
     return AdminVehicles
+end)
+
+-- Admin menu NUI callbacks
+RegisterNUICallback('closeAdminMenu', function(data, cb)
+    CloseAdminMenu()
+    cb('ok')
+end)
+
+RegisterNUICallback('executeAdminCommand', function(data, cb)
+    if data.command then
+        print('[KiezKrieg] Executing admin command: ' .. data.command)
+        ExecuteCommand(data.command)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('toggleAdminDuty', function(data, cb)
+    ExecuteCommand('aduty')
+    cb('ok')
 end)

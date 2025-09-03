@@ -196,16 +196,13 @@ function StartFFAMinimap()
 end
 
 -- Commands
-RegisterCommand('leaveffa', function()
+RegisterCommand('quitffa', function()
     if InFFA then
         TriggerServerEvent('kk-ffa:leaveZone')
     else
         exports['kk-ui']:ShowNotification('You are not in FFA', 'error')
     end
 end, false)
-
--- Key bindings
-RegisterKeyMapping('leaveffa', 'Leave FFA Zone', 'keyboard', 'F3')
 
 -- Export functions
 exports('IsInFFA', function()
