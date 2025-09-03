@@ -68,7 +68,12 @@ end)
 
 RegisterNetEvent('kk-ffa:teleportToLobby')
 AddEventHandler('kk-ffa:teleportToLobby', function()
-    local lobbySpawn = Config.SpawnPoints.lobby[1]
+    local lobbySpawn = Config.SpawnPoints and Config.SpawnPoints.lobby and Config.SpawnPoints.lobby[1]
+    if not lobbySpawn then
+        -- Fallback spawn point
+        lobbySpawn = {x = -1037.8, y = -2737.9, z = 20.2, h = 240.0}
+        print('[KiezKrieg-Zones] WARNING: Using fallback lobby spawn point')
+    end
     TriggerEvent('kk-ffa:teleportToPosition', lobbySpawn)
 end)
 

@@ -29,7 +29,7 @@ function LoadFFAZones()
                 currentPlayers = {},
                 headshotPlayers = {},
                 bodyshotPlayers = {},
-                routingBucket = Config.RoutingBuckets.ffa_start + zone.id
+                routingBucket = Config.GetSafeRoutingBucket('ffa', zone.id)
             }
         end
         print('[KiezKrieg] Loaded ' .. #result .. ' FFA zones')
@@ -187,7 +187,8 @@ function LeaveFFAZone(playerId, identifier)
     FFAPlayers[identifier] = nil
     
     -- Reset routing bucket to lobby
-    SetPlayerRoutingBucket(playerId, Config.RoutingBuckets.lobby)
+    local lobbyBucket = Config.RoutingBuckets and Config.RoutingBuckets.lobby or 0
+    SetPlayerRoutingBucket(playerId, lobbyBucket)
     
     -- Teleport to lobby
     TriggerClientEvent('kk-ffa:teleportToLobby', playerId)
