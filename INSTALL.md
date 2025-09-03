@@ -34,7 +34,7 @@
 
 ### 3. Server Configuration
 
-Add these lines to your `server.cfg` (order matters):
+Copy the provided `server.cfg` file or add these lines to your `server.cfg` (order matters):
 ```cfg
 # KiezKrieg Framework - Add AFTER ESX and oxmysql
 ensure kk-core
@@ -42,7 +42,14 @@ ensure kk-ui
 ensure kk-zones
 ensure kk-admin
 ensure kk-factions
+
+# Admin permissions
+add_ace group.admin kk.admin.commands allow
+add_ace group.admin kk.admin.factions allow
+add_ace group.admin kk.admin.zones allow
 ```
+
+**Note**: The included `server.cfg` file contains all necessary configurations including admin permissions.
 
 ### 4. ESX Configuration
 
@@ -61,6 +68,8 @@ In TxAdmin, add the following permissions for your admin group:
 - `kk.admin.commands` - Basic admin commands
 - `kk.admin.factions` - Faction management
 - `kk.admin.zones` - Zone management
+
+Or copy the provided `server.cfg` file to configure all permissions automatically.
 
 ### 6. First Launch
 
