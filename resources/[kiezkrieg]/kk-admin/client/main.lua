@@ -37,16 +37,23 @@ function ShowAdminMenu()
     
     print('[KiezKrieg] Opening admin menu')
     IsAdminMenuOpen = true
-    SetNuiFocus(true, true)
     
-    -- Send admin menu data to UI
-    SendNUIMessage({
-        type = 'openAdminMenu',
-        isOnDuty = IsOnDuty,
-        adminCommands = {
-            'aduty', 'goto', 'tpm', 'bring', 'vehicle', 'dv', 'nametags'
-        }
-    })
+    -- Show admin menu as a simple notification-based menu
+    exports['kk-ui']:ShowNotification('=== ADMIN MENU ===', 'info')
+    exports['kk-ui']:ShowNotification('F3 - Toggle this menu', 'info')
+    exports['kk-ui']:ShowNotification('/aduty - Toggle admin duty', 'info')
+    exports['kk-ui']:ShowNotification('/goto [id] - Teleport to player', 'info')
+    exports['kk-ui']:ShowNotification('/tpm - Teleport to marker', 'info')
+    exports['kk-ui']:ShowNotification('/bring [id] - Bring player', 'info')
+    exports['kk-ui']:ShowNotification('/vehicle [name] - Spawn vehicle', 'info')
+    exports['kk-ui']:ShowNotification('/dv - Delete vehicle', 'info')
+    exports['kk-ui']:ShowNotification('/nametags - Toggle nametags', 'info')
+    exports['kk-ui']:ShowNotification('Status: ' .. (IsOnDuty and 'ON DUTY' or 'OFF DUTY'), IsOnDuty and 'success' or 'warning')
+    
+    -- Auto-close the menu after a few seconds
+    Citizen.SetTimeout(5000, function()
+        CloseAdminMenu()
+    end)
 end
 
 function CloseAdminMenu()
@@ -54,11 +61,6 @@ function CloseAdminMenu()
     
     print('[KiezKrieg] Closing admin menu')
     IsAdminMenuOpen = false
-    SetNuiFocus(false, false)
-    
-    SendNUIMessage({
-        type = 'closeAdminMenu'
-    })
 end
 
 -- Server response handlers
@@ -76,11 +78,14 @@ end)
 RegisterNetEvent('kk-admin:setDutyStatus')
 AddEventHandler('kk-admin:setDutyStatus', function(status)
     IsOnDuty = status
+    print('[KiezKrieg] Admin duty status changed to: ' .. (status and 'ON' or 'OFF'))
     
     if status then
         StartAdminFeatures()
+        exports['kk-ui']:ShowNotification('Admin duty: ON', 'success')
     else
         StopAdminFeatures()
+        exports['kk-ui']:ShowNotification('Admin duty: OFF', 'info')
     end
 end)
 
@@ -347,23 +352,4 @@ end)
 
 exports('GetAdminVehicles', function()
     return AdminVehicles
-end)
-
--- Admin menu NUI callbacks
-RegisterNUICallback('closeAdminMenu', function(data, cb)
-    CloseAdminMenu()
-    cb('ok')
-end)
-
-RegisterNUICallback('executeAdminCommand', function(data, cb)
-    if data.command then
-        print('[KiezKrieg] Executing admin command: ' .. data.command)
-        ExecuteCommand(data.command)
-    end
-    cb('ok')
-end)
-
-RegisterNUICallback('toggleAdminDuty', function(data, cb)
-    ExecuteCommand('aduty')
-    cb('ok')
 end)
