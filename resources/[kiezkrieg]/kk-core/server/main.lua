@@ -127,16 +127,23 @@ end
 
 -- Load zones from database
 function LoadZones()
+    print('[KiezKrieg] Loading zones from database...')
     MySQL.Async.fetchAll('SELECT * FROM kk_zones WHERE is_active = 1', {}, function(result)
+        if not result then
+            print('[KiezKrieg] ERROR: No database result when loading zones')
+            return
+        end
+        
         for _, zone in pairs(result) do
             local coords = vector3(zone.x, zone.y, zone.z)
             local zoneData = KK.CreateZoneData(zone.id, zone.name, zone.type, coords, zone.radius, zone.color, zone.max_players)
             Zones[zone.id] = zoneData
+            print('[KiezKrieg] Loaded zone: ' .. zone.name .. ' (Type: ' .. zone.type .. ')')
         end
         
         -- Notify all clients about zones
         TriggerClientEvent('kk-core:zonesLoaded', -1, Zones)
-        print('[KiezKrieg] Loaded ' .. #result .. ' zones')
+        print('[KiezKrieg] Loaded ' .. #result .. ' zones and notified all clients')
     end)
 end
 
@@ -188,8 +195,17 @@ AddEventHandler('kk-core:requestPlayerData', function()
     local source = source
     local identifier = GetPlayerIdentifier(source, 0)
     
+    print('[KiezKrieg] Player data requested by: ' .. source .. ' (' .. identifier .. ')')
+    
     if Players[identifier] then
+        print('[KiezKrieg] Sending player data to client: ' .. Players[identifier].playerName)
         TriggerClientEvent('kk-core:receivePlayerData', source, Players[identifier])
+    else
+        print('[KiezKrieg] WARNING: No player data found for ' .. identifier .. ', loading from database...')
+        local xPlayer = ESX.GetPlayerFromId(source)
+        if xPlayer then
+            LoadPlayerData(source, identifier, xPlayer.getName())
+        end
     end
 end)
 
@@ -224,7 +240,18 @@ end)
 -- Initialize server
 Citizen.CreateThread(function()
     Citizen.Wait(1000) -- Wait for ESX to load
-    LoadZones()
+    print('[KiezKrieg] Initializing core server...')
+    
+    -- Test database connectivity
+    MySQL.Async.fetchAll('SELECT 1', {}, function(result)
+        if result then
+            print('[KiezKrieg] Database connection successful')
+            LoadZones()
+        else
+            print('[KiezKrieg] ERROR: Database connection failed!')
+        end
+    end)
+    
     print('[KiezKrieg] Core server initialized')
 end)
 

@@ -21,8 +21,12 @@ Citizen.CreateThread(function()
     -- Register key mapping for main menu
     RegisterKeyMapping('kk_menu', 'Open KiezKrieg Menu', 'keyboard', 'F2')
     RegisterCommand('kk_menu', function()
+        print('[KiezKrieg] F2 pressed - attempting to open main menu')
         if not IsMenuOpen then
             OpenMainMenu()
+        else
+            print('[KiezKrieg] Menu already open, closing instead')
+            CloseMainMenu()
         end
     end, false)
     
@@ -63,7 +67,31 @@ end)
 
 -- Main menu functions
 function OpenMainMenu()
-    if IsMenuOpen then return end
+    if IsMenuOpen then 
+        print('[KiezKrieg] Menu already open, ignoring F2 press')
+        return 
+    end
+    
+    -- Debug: Check if required data is available
+    if not PlayerData then
+        print('[KiezKrieg] ERROR: PlayerData not loaded, requesting from server...')
+        TriggerServerEvent('kk-core:requestPlayerData')
+        ShowNotification('Loading player data, please try again in a moment...', 'info')
+        return
+    end
+    
+    if not Zones or next(Zones) == nil then
+        print('[KiezKrieg] WARNING: No zones loaded, menu may not function properly')
+        ShowNotification('Loading zones, menu may be limited...', 'warning')
+    end
+    
+    if not Config then
+        print('[KiezKrieg] ERROR: Config not available')
+        ShowNotification('Configuration error, please try again', 'error')
+        return
+    end
+    
+    print('[KiezKrieg] Opening main menu - PlayerData: ' .. (PlayerData and 'OK' or 'MISSING') .. ', Zones: ' .. GetTableSize(Zones))
     
     IsMenuOpen = true
     SetNuiFocus(true, true)
@@ -78,6 +106,8 @@ function OpenMainMenu()
             ui = Config.UI
         }
     })
+    
+    print('[KiezKrieg] Main menu NUI message sent')
 end
 
 function CloseMainMenu()

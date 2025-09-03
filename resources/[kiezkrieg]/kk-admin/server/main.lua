@@ -282,3 +282,15 @@ end)
 exports('GetOnlineDutyAdmins', function()
     return AdminPlayers
 end)
+
+-- Admin menu permission check
+RegisterServerEvent('kk-admin:checkPermissions')
+AddEventHandler('kk-admin:checkPermissions', function()
+    local source = source
+    
+    if IsPlayerAdmin(source) then
+        TriggerClientEvent('kk-admin:permissionGranted', source)
+    else
+        TriggerClientEvent('kk-admin:permissionDenied', source)
+    end
+end)

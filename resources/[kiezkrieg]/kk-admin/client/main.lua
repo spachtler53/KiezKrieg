@@ -2,16 +2,90 @@
 local IsOnDuty = false
 local ShowNametags = false
 local AdminVehicles = {}
+local IsAdminMenuOpen = false
+
+-- Initialize admin client
+Citizen.CreateThread(function()
+    -- Wait for ESX to be ready
+    while not ESX.GetPlayerData().job do
+        Citizen.Wait(10)
+    end
+    
+    -- Register F3 key mapping for admin menu
+    RegisterKeyMapping('kk_admin_menu', 'Open Admin Menu', 'keyboard', 'F3')
+    RegisterCommand('kk_admin_menu', function()
+        print('[KiezKrieg] F3 pressed - checking admin permissions')
+        OpenAdminMenu()
+    end, false)
+    
+    print('[KiezKrieg] Admin client initialized')
+end)
+
+-- Admin menu functions
+function OpenAdminMenu()
+    if IsAdminMenuOpen then 
+        print('[KiezKrieg] Admin menu already open')
+        return 
+    end
+    
+    -- Check if player has admin permissions by triggering server check
+    TriggerServerEvent('kk-admin:checkPermissions')
+end
+
+function ShowAdminMenu()
+    if IsAdminMenuOpen then return end
+    
+    print('[KiezKrieg] Opening admin menu')
+    IsAdminMenuOpen = true
+    
+    -- Show admin menu as a simple notification-based menu
+    exports['kk-ui']:ShowNotification('=== ADMIN MENU ===', 'info')
+    exports['kk-ui']:ShowNotification('F3 - Toggle this menu', 'info')
+    exports['kk-ui']:ShowNotification('/aduty - Toggle admin duty', 'info')
+    exports['kk-ui']:ShowNotification('/goto [id] - Teleport to player', 'info')
+    exports['kk-ui']:ShowNotification('/tpm - Teleport to marker', 'info')
+    exports['kk-ui']:ShowNotification('/bring [id] - Bring player', 'info')
+    exports['kk-ui']:ShowNotification('/vehicle [name] - Spawn vehicle', 'info')
+    exports['kk-ui']:ShowNotification('/dv - Delete vehicle', 'info')
+    exports['kk-ui']:ShowNotification('/nametags - Toggle nametags', 'info')
+    exports['kk-ui']:ShowNotification('Status: ' .. (IsOnDuty and 'ON DUTY' or 'OFF DUTY'), IsOnDuty and 'success' or 'warning')
+    
+    -- Auto-close the menu after a few seconds
+    Citizen.SetTimeout(5000, function()
+        CloseAdminMenu()
+    end)
+end
+
+function CloseAdminMenu()
+    if not IsAdminMenuOpen then return end
+    
+    print('[KiezKrieg] Closing admin menu')
+    IsAdminMenuOpen = false
+end
+
+-- Server response handlers
+RegisterNetEvent('kk-admin:permissionGranted')
+AddEventHandler('kk-admin:permissionGranted', function()
+    ShowAdminMenu()
+end)
+
+RegisterNetEvent('kk-admin:permissionDenied')
+AddEventHandler('kk-admin:permissionDenied', function()
+    exports['kk-ui']:ShowNotification('You do not have admin permissions', 'error')
+end)
 
 -- Event handlers
 RegisterNetEvent('kk-admin:setDutyStatus')
 AddEventHandler('kk-admin:setDutyStatus', function(status)
     IsOnDuty = status
+    print('[KiezKrieg] Admin duty status changed to: ' .. (status and 'ON' or 'OFF'))
     
     if status then
         StartAdminFeatures()
+        exports['kk-ui']:ShowNotification('Admin duty: ON', 'success')
     else
         StopAdminFeatures()
+        exports['kk-ui']:ShowNotification('Admin duty: OFF', 'info')
     end
 end)
 
